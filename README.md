@@ -1,4 +1,4 @@
-v. 0.22
+v. 0.24
 
 # stock-analysis-bot
 Aktie Analyse algo. 
