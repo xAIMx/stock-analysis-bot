@@ -18,6 +18,9 @@ Dato: 2026-06-19
 - Forward P/E: 13.67
 - EPS: 27.41
 - Dividend Yield: 5.67%
+- 52 Week High: 491.50 DKK
+- 52 Week Low: 224.25 DKK
+- Average Volume: 6.1 mio.
 
 ## Scores
 

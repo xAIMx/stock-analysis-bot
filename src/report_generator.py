@@ -43,6 +43,9 @@ Dato: {today}
 - Forward P/E: {format_number(data.get("forward_pe"))}
 - EPS: {format_number(data.get("eps"))}
 - Dividend Yield: {format_number(data.get("dividend_yield"))}%
+- 52 Week High: {format_number(data.get("fifty_two_week_high"))} {data.get("currency")}
+- 52 Week Low: {format_number(data.get("fifty_two_week_low"))} {data.get("currency")}
+- Average Volume: {format_large_number(data.get("average_volume"))}
 
 ## Scores
 

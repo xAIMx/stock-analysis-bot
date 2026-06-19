@@ -23,4 +23,7 @@ def get_stock_data(ticker: str) -> dict:
         "dividend_yield": info.get("dividendYield"),
         "sector": info.get("sector"),
         "industry": info.get("industry"),
+        "fifty_two_week_high": info.get("fiftyTwoWeekHigh"),
+        "fifty_two_week_low": info.get("fiftyTwoWeekLow"),
+        "average_volume": info.get("averageVolume"),
     }
