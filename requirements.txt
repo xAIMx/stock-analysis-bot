@@ -2,5 +2,6 @@ openai
 python-dotenv
 yfinance
 pandas
+numpy
 requests
 beautifulsoup4

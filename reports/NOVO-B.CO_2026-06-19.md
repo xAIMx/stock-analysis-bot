@@ -25,6 +25,23 @@ Dato: 2026-06-19
 ## Scores
 
 - Fundamental Score: 90/100
+- Technical Score: 87/100
+
+
+### Tekniske Indikatorer
+
+- **50-dages gennemsnit (SMA50):** 273.65 DKK
+- **200-dages gennemsnit (SMA200):** 302.70 DKK
+- **RSI (14):** 57.41
+- **Momentum (10-dag):** 3.21%
+
+### Teknisk Analyse - Insights
+
+✓ Pris handler 7.1% over 50-dages gennemsnit (bullish kortsigtet)
+✗ Pris handler 3.2% under 200-dages gennemsnit (bearish langsigtet)
+✓ RSI på 57.41 (moderat bullish momentum)
+• Momentum svagt: 3.2% (sidelæns)
+
 
 ## Foreløbig vurdering
 

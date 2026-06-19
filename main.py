@@ -1,6 +1,8 @@
 import sys
 from src.data_fetcher import get_stock_data
 from src.analyzer import calculate_fundamental_score
+from src.technical_analyzer import calculate_technical_indicators, calculate_technical_score
+from src.analyst_ratings import get_analyst_ratings, get_analyst_sentiment_score
 from src.report_generator import generate_markdown_report, save_report
 
 
@@ -12,16 +14,38 @@ def main():
 
     ticker = sys.argv[1]
     data = get_stock_data(ticker)
-    score = calculate_fundamental_score(data)
-    report = generate_markdown_report(data, score)
+    
+    fundamental_score = calculate_fundamental_score(data)
+    
+    # Beregn tekniske indikatorer
+    technical_indicators = calculate_technical_indicators(data.get("history"))
+    technical_score = calculate_technical_score(technical_indicators)
+
+    # Hent analyst ratings
+    analyst_data = {
+        "recommendation_mean": data.get("recommendation_mean"),
+        "recommendation_key": data.get("recommendation_key"),
+        "numberOfAnalystOpinions": data.get("number_of_analysts"),
+        "targetMeanPrice": data.get("target_mean_price"),
+        "targetMedianPrice": data.get("target_median_price"),
+        "targetHighPrice": data.get("target_high_price"),
+        "targetLowPrice": data.get("target_low_price"),
+    }
+    analyst_ratings = get_analyst_ratings(analyst_data)
+    analyst_score = get_analyst_sentiment_score(analyst_ratings)
+
+    report = generate_markdown_report(data, fundamental_score, technical_indicators, technical_score, analyst_ratings, analyst_score)
     filename = save_report(ticker, report)
 
     print("\n=== Aktieanalyse Data ===")
     for key, value in data.items():
-        print(f"{key}: {value}")
+        if key != "history":  # Gem historien fra print output
+            print(f"{key}: {value}")
 
     print("\n=== Analyse ===")
-    print(f"Fundamental Score: {score}/100")
+    print(f"Fundamental Score: {fundamental_score}/100")
+    print(f"Technical Score: {technical_score}/100")
+    print(f"Analyst Score: {analyst_score}/100")
     print(f"\nRapport gemt som: {filename}")
 
 
