@@ -5,3 +5,4 @@ pandas
 numpy
 requests
 beautifulsoup4
+discord.py

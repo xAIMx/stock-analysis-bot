@@ -1,9 +1,15 @@
 import sys
+import os
+from dotenv import load_dotenv
 from src.data_fetcher import get_stock_data
 from src.analyzer import calculate_fundamental_score
 from src.technical_analyzer import calculate_technical_indicators, calculate_technical_score
 from src.analyst_ratings import get_analyst_ratings, get_analyst_sentiment_score
 from src.report_generator import generate_markdown_report, save_report
+from src.discord_client import send_report_async
+
+# Load environment variables from .env
+load_dotenv()
 
 
 def main():
@@ -47,6 +53,14 @@ def main():
     print(f"Technical Score: {technical_score}/100")
     print(f"Analyst Score: {analyst_score}/100")
     print(f"\nRapport gemt som: {filename}")
+
+    # Send til Discord
+    print("\n=== Discord Upload ===")
+    if send_report_async(ticker, filename):
+        print("Rapport sendt til Discord ✅")
+    else:
+        print("Rapport kunne ikke sendes til Discord (tjek DISCORD_BOT_TOKEN)")
+
 
 
 if __name__ == "__main__":
