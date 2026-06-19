@@ -9,15 +9,15 @@ Dato: 2026-06-19
 - Sektor: Healthcare
 - Industri: Drug Manufacturers - General
 - Valuta: DKK
-- Seneste pris: 292.95
+- Seneste pris: 292.95 DKK
 
 ## Nøgletal
 
-- Market Cap: 1297162305536
-- P/E: 10.687706
-- Forward P/E: 13.674952
+- Market Cap: 1297.2 mia. DKK
+- P/E: 10.69
+- Forward P/E: 13.67
 - EPS: 27.41
-- Dividend Yield: 5.67
+- Dividend Yield: 5.67%
 
 ## Scores
 
