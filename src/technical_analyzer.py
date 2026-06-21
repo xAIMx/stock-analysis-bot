@@ -48,6 +48,88 @@ def calculate_momentum(prices, period=10):
     return round(momentum, 2)
 
 
+def calculate_macd(prices, fast=12, slow=26, signal=9):
+    """
+    Beregner MACD (Moving Average Convergence Divergence)
+    Returnerer dict med macd, signal og histogram
+    """
+    if len(prices) < slow:
+        return None
+
+    ema_fast = pd.Series(prices).ewm(span=fast).mean().values
+    ema_slow = pd.Series(prices).ewm(span=slow).mean().values
+    
+    macd_line = ema_fast - ema_slow
+    signal_line = pd.Series(macd_line).ewm(span=signal).mean().values
+    histogram = macd_line - signal_line
+
+    return {
+        "macd": round(float(macd_line[-1]), 4),
+        "signal": round(float(signal_line[-1]), 4),
+        "histogram": round(float(histogram[-1]), 4),
+    }
+
+
+def calculate_bollinger_bands(prices, period=20, std_dev=2):
+    """
+    Beregner Bollinger Bands
+    Returnerer øvre band, midterlinje (SMA) og nedre band
+    """
+    if len(prices) < period:
+        return None
+
+    sma = prices[-period:].mean()
+    std = prices[-period:].std()
+    
+    upper_band = sma + (std_dev * std)
+    lower_band = sma - (std_dev * std)
+
+    return {
+        "upper": round(upper_band, 2),
+        "middle": round(sma, 2),
+        "lower": round(lower_band, 2),
+    }
+
+
+def calculate_price_changes(history_df):
+    """
+    Beregner prisændringer over forskellige perioder
+    """
+    if history_df is None or len(history_df) == 0:
+        return {}
+
+    valid_closes = history_df["Close"].dropna()
+    if len(valid_closes) == 0:
+        return {}
+
+    prices = valid_closes.values
+    current_price = prices[-1]
+    
+    changes = {}
+
+    # 1 måned (cirka 21-22 handelsdage)
+    if len(prices) >= 22:
+        price_1m_ago = prices[-22]
+        changes["price_change_1m"] = (current_price - price_1m_ago) / price_1m_ago
+
+    # 3 måneder (cirka 63-65 handelsdage)
+    if len(prices) >= 65:
+        price_3m_ago = prices[-65]
+        changes["price_change_3m"] = (current_price - price_3m_ago) / price_3m_ago
+
+    # 6 måneder (cirka 130-132 handelsdage)
+    if len(prices) >= 132:
+        price_6m_ago = prices[-132]
+        changes["price_change_6m"] = (current_price - price_6m_ago) / price_6m_ago
+
+    # 1 år (cirka 252 handelsdage)
+    if len(prices) >= 252:
+        price_1y_ago = prices[-252]
+        changes["price_change_1y"] = (current_price - price_1y_ago) / price_1y_ago
+
+    return changes
+
+
 def calculate_technical_indicators(history_df):
     """
     Beregner alle tekniske indikatorer fra historiske prisdata.
@@ -67,6 +149,7 @@ def calculate_technical_indicators(history_df):
     # Beregn glidende gennemsnit
     sma50 = prices[-50:].mean() if len(prices) >= 50 else None
     sma200 = prices[-200:].mean() if len(prices) >= 200 else None
+    ema12 = pd.Series(prices).ewm(span=12).mean().values[-1] if len(prices) >= 12 else None
 
     # Beregn RSI
     rsi = calculate_rsi(prices, period=14)
@@ -74,13 +157,33 @@ def calculate_technical_indicators(history_df):
     # Beregn Momentum
     momentum = calculate_momentum(prices, period=10)
 
-    return {
+    # Beregn MACD
+    macd = calculate_macd(prices)
+
+    # Beregn Bollinger Bands
+    bollinger = calculate_bollinger_bands(prices, period=20, std_dev=2)
+
+    # Beregn prisændringer
+    price_changes = calculate_price_changes(history_df)
+
+    indicators = {
         "current_price": round(current_price, 2),
         "sma50": round(sma50, 2) if sma50 else None,
         "sma200": round(sma200, 2) if sma200 else None,
+        "ema12": round(ema12, 2) if ema12 else None,
         "rsi": rsi,
         "momentum": momentum,
+        "macd": macd,
     }
+
+    if bollinger:
+        indicators["bollinger_upper"] = bollinger["upper"]
+        indicators["bollinger_middle"] = bollinger["middle"]
+        indicators["bollinger_lower"] = bollinger["lower"]
+
+    indicators.update(price_changes)
+
+    return indicators
 
 
 def calculate_technical_score(indicators: dict) -> int:
